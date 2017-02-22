@@ -30,6 +30,8 @@ export class MessageBar extends React.Component<IMessageBarProps, IMessageBarSta
     [MessageBarType.success]: 'Completed'
   };
 
+  private _isMounted: boolean;
+
   constructor(props: IMessageBarProps) {
     super(props);
 
@@ -46,12 +48,21 @@ export class MessageBar extends React.Component<IMessageBarProps, IMessageBarSta
   }
 
   public componentDidMount() {
+
+    this._isMounted = true;
+
     /**
      * Live regions need an update to announce content.
      */
     setTimeout(() => {
-      this.setState({ showContent: true });
+      if (this._isMounted) {
+        this.setState({ showContent: true });
+      }
     }, 10);
+  }
+
+  public componentWillUnmount(): void {
+    this._isMounted = false;
   }
 
   private _getActionsDiv(): JSX.Element {
